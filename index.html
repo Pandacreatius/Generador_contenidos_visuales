@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generador Profesional de Prompts para Redes Sociales</title>
+    <style>
+        :root{
+            --bg: #f3f6fb;
+            --surface: #ffffff;
+            --surface-2: #f8fafc;
+            --text: #18212f;
+            --muted: #617086;
+            --line: #d9e1ec;
+            --primary: #1f4b99;
+            --primary-2: #16386f;
+            --accent: #caa86a;
+            --success: #1f7a4d;
+            --shadow: 0 20px 50px rgba(17, 30, 56, 0.10);
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(31,75,153,0.10), transparent 32%),
+                radial-gradient(circle at top right, rgba(202,168,106,0.14), transparent 28%),
+                linear-gradient(180deg, #eef3f9 0%, #f7f9fc 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 28px;
+        }
+
+        .app {
+            max-width: 1180px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width: 980px) {
+            .app {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: var(--surface);
+            border: 1px solid rgba(217, 225, 236, 0.9);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .hero {
+            padding: 34px 34px 28px;
+            background:
+                linear-gradient(135deg, rgba(22,56,111,1) 0%, rgba(31,75,153,1) 62%, rgba(63,110,180,1) 100%);
+            color: white;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.08);
+            font-size: 12px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 {
+            font-size: clamp(28px, 4vw, 42px);
+            line-height: 1.1;
+            margin-bottom: 12px;
+            font-weight: 800;
+        }
+
+        .hero p {
+            max-width: 700px;
+            color: rgba(255,255,255,0.88);
+            font-size: 15px;
+            line-height: 1.65;
+        }
+
+        .form-wrap {
+            padding: 30px 34px 34px;
+        }
+
+        .notice {
+            background: linear-gradient(135deg, rgba(202,168,106,0.12), rgba(202,168,106,0.06));
+            color: #6c5426;
+            border: 1px solid rgba(202,168,106,0.24);
+            border-radius: var(--radius-lg);
+            padding: 16px 18px;
+            margin-bottom: 24px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .section {
+            margin-bottom: 26px;
+        }
+
+        .section h2 {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            margin-bottom: 14px;
+        }
+
+        .section p.helper {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+
+        .grid-2, .grid-3 {
+            display: grid;
+            gap: 12px;
+        }
+
+        .grid-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+        .grid-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+
+        @media (max-width: 700px) {
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-btn {
+            width: 100%;
+            border: 1px solid var(--line);
+            background: var(--surface);
+            color: var(--text);
+            border-radius: 14px;
+            padding: 14px 15px;
+            text-align: left;
+            cursor: pointer;
+            transition: .22s ease;
+            font-size: 14px;
+            line-height: 1.4;
+            font-weight: 600;
+        }
+
+        .option-btn small {
+            display: block;
+            color: var(--muted);
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        .option-btn:hover {
+            transform: translateY(-1px);
+            border-color: rgba(31,75,153,0.45);
+            background: #f8fbff;
+            box-shadow: 0 10px 22px rgba(31,75,153,0.08);
+        }
+
+        .option-btn.selected {
+            background: linear-gradient(180deg, rgba(31,75,153,0.08), rgba(31,75,153,0.14));
+            border-color: rgba(31,75,153,0.55);
+            color: var(--primary-2);
+        }
+
+        .field-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0,1fr));
+            gap: 14px;
+        }
+
+        @media (max-width: 700px) {
+            .field-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .field label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .field label span {
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        input[type="text"], textarea, select {
+            width: 100%;
+            border: 1.5px solid var(--line);
+            background: white;
+            border-radius: 12px;
+            padding: 13px 14px;
+            font: inherit;
+            color: var(--text);
+            transition: .2s ease;
+        }
+
+        input[type="text"]:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: rgba(31,75,153,0.55);
+            box-shadow: 0 0 0 4px rgba(31,75,153,0.09);
+        }
+
+        textarea {
+            min-height: 132px;
+            resize: vertical;
+        }
+
+        textarea.output {
+            min-height: 420px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            line-height: 1.65;
+            background: #fbfcfe;
+        }
+
+        .range-card {
+            background: var(--surface-2);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 16px 18px;
+        }
+
+        .range-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .range-top strong {
+            color: var(--primary);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .toggle-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .switch {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--surface-2);
+            border: 1px solid var(--line);
+            padding: 10px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .upload-box {
+            border: 1.5px dashed rgba(31,75,153,0.28);
+            background: linear-gradient(180deg, #fbfdff, #f7faff);
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .upload-box input[type="file"] {
+            width: 100%;
+            margin-top: 8px;
+            font: inherit;
+        }
+
+        .file-info {
+            margin-top: 10px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .side {
+            padding: 28px;
+        }
+
+        .side-card {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 18px;
+        }
+
+        .side-card h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: var(--primary-2);
+        }
+
+        .side-card p, .side-card li {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        .side-card ul {
+            padding-left: 18px;
+        }
+
+        .preview-chip-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .chip {
+            background: #f1f5fb;
+            color: var(--primary-2);
+            border: 1px solid #d9e4f4;
+            padding: 8px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 14px;
+            padding: 14px 18px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: .02em;
+            transition: .2s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-2), var(--primary));
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 24px rgba(31,75,153,0.2);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 1.5px solid rgba(31,75,153,0.22);
+            flex: 1;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fbff;
+        }
+
+        .feedback {
+            margin-top: 12px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            background: rgba(31,122,77,0.08);
+            color: var(--success);
+            border: 1px solid rgba(31,122,77,0.18);
+            font-size: 13px;
+            display: none;
+        }
+
+        .feedback.show { display: block; }
+
+        .footer-note {
+            margin-top: 18px;
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <section class="panel">
+            <div class="hero">
+                <div class="eyebrow">Contenido visual • Social media • IA</div>
+                <h1>Generador profesional de prompts para contenidos visuales</h1>
+                <p>
+                    Diseñado para crear prompts más útiles, más flexibles y mejor redactados para Instagram, LinkedIn, Facebook u otras redes.
+                    Ahora incluye textos opcionales personalizados y la posibilidad de usar una imagen como referencia de fondo.
+                </p>
+            </div>
+
+            <div class="form-wrap">
+                <div class="notice">
+                    Configura el contenido, añade solo los campos que necesites y obtendrás un prompt listo para usar.
+                    Los textos personalizados y la imagen de fondo son completamente opcionales.
+                </div>
+
+                <div class="section">
+                    <h2>Tipo de contenido</h2>
+                    <div class="grid-3" id="theme-grid">
+                        <button class="option-btn" data-theme="tips">Tips y consejos<small>Contenido breve y accionable</small></button>
+                        <button class="option-btn" data-theme="conceptos">Conceptos clave<small>Ideas explicadas de forma visual</small></button>
+                        <button class="option-btn" data-theme="tutorial">Tutorial paso a paso<small>Secuencia clara y ordenada</small></button>
+                        <button class="option-btn" data-theme="errores">Errores frecuentes<small>Qué evitar y por qué</small></button>
+                        <button class="option-btn" data-theme="comparativa">Comparativa<small>Dos enfoques o soluciones</small></button>
+                        <button class="option-btn" data-theme="inspiracion">Mensaje inspirador<small>Formato emocional pero profesional</small></button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Formato visual</h2>
+                    <div class="grid-3" id="format-grid">
+                        <button class="option-btn" data-format="infografia">Infografía<small>Bloques de información claros</small></button>
+                        <button class="option-btn" data-format="quote">Cita visual<small>Titular potente y apoyo visual</small></button>
+                        <button class="option-btn" data-format="carrusel">Slide de carrusel<small>Diseño para una diapositiva</small></button>
+                        <button class="option-btn" data-format="mockup">Mockup<small>Pantalla o dispositivo integrado</small></button>
+                        <button class="option-btn" data-format="comparacion">Lado a lado<small>Antes/después o opción A/B</small></button>
+                        <button class="option-btn" data-format="poster">Cartel limpio<small>Impacto visual directo</small></button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Nivel de complejidad</h2>
+                    <div class="range-card">
+                        <div class="range-top">
+                            <span>Principiante ← → Avanzado</span>
+                            <strong id="level-value">Básico</strong>
+                        </div>
+                        <input type="range" id="complexity" min="1" max="3" step="1" value="1" />
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Enfoque y plataforma</h2>
+                    <div class="field-grid">
+                        <div class="field">
+                            <label for="focus">Enfoque principal</label>
+                            <select id="focus">
+                                <option value="profesional">Profesional / laboral</option>
+                                <option value="negocio">Emprendimiento / negocio</option>
+                                <option value="educativo">Educativo / formativo</option>
+                                <option value="marca">Marca personal</option>
+                                <option value="tecnico">Técnico / especializado</option>
+                                <option value="motivacional">Inspiracional / crecimiento</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="platform">Red o destino</label>
+                            <select id="platform">
+                                <option value="Instagram">Instagram</option>
+                                <option value="LinkedIn">LinkedIn</option>
+                                <option value="Facebook">Facebook</option>
+                                <option value="TikTok">TikTok</option>
+                                <option value="General">Uso general</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Contenido base</h2>
+                    <div class="field-grid">
+                        <div class="field">
+                            <label for="topic">Tema específico <span>(opcional)</span></label>
+                            <input type="text" id="topic" placeholder="Ej.: productividad, IA, marketing, ventas, WordPress..." />
+                        </div>
+                        <div class="field">
+                            <label for="audience">Público objetivo <span>(opcional)</span></label>
+                            <input type="text" id="audience" placeholder="Ej.: emprendedores, docentes, autónomos, alumnos..." />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Textos personalizados opcionales</h2>
+                    <p class="helper">Puedes dejarlos vacíos. Si escribes algo aquí, el prompt indicará que esos textos deben respetarse.</p>
+                    <div class="field-grid">
+                        <div class="field">
+                            <label for="headline">Texto principal / titular <span>(opcional)</span></label>
+                            <input type="text" id="headline" placeholder="Ej.: 5 claves para crear mejores contenidos" />
+                        </div>
+                        <div class="field">
+                            <label for="subheadline">Subtexto o apoyo <span>(opcional)</span></label>
+                            <input type="text" id="subheadline" placeholder="Ej.: ideas claras, visuales y aplicables" />
+                        </div>
+                    </div>
+
+                    <div class="field-grid" style="margin-top:14px;">
+                        <div class="field">
+                            <label for="cta">Mensaje final o CTA <span>(opcional)</span></label>
+                            <input type="text" id="cta" placeholder="Ej.: Guarda este post para revisarlo luego" />
+                        </div>
+                        <div class="field">
+                            <label for="brand">Marca, proyecto o firma <span>(opcional)</span></label>
+                            <input type="text" id="brand" placeholder="Ej.: Panda Creatius" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Imagen de fondo o referencia <span style="text-transform:none; letter-spacing:0; color:var(--muted); font-size:13px; font-weight:600;">(opcional)</span></h2>
+                    <div class="upload-box">
+                        <p class="helper" style="margin-bottom:0;">
+                            Puedes adjuntar una imagen para indicar que debe usarse como referencia visual o como fondo principal del diseño.
+                            El archivo no se incrusta dentro del prompt, pero sí se menciona para que lo uses junto al generador de imágenes.
+                        </p>
+                        <input type="file" id="background-image" accept="image/*" />
+                        <div class="file-info" id="file-info">No se ha seleccionado ninguna imagen.</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Indicaciones extra <span style="text-transform:none; letter-spacing:0; color:var(--muted); font-size:13px; font-weight:600;">(opcional)</span></h2>
+                    <div class="field">
+                        <label for="extra">Notas adicionales</label>
+                        <textarea id="extra" placeholder="Ej.: mantener una estética premium, dejar espacio negativo, no usar demasiados iconos, tono sobrio, etc."></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <aside class="panel side">
+            <div class="side-card">
+                <h3>Resumen dinámico</h3>
+                <p>El prompt se actualiza automáticamente según tus elecciones.</p>
+                <div class="preview-chip-wrap" id="summary-chips"></div>
+            </div>
+
+            <div class="side-card">
+                <h3>Prompt generado</h3>
+                <textarea class="output" id="prompt-output" readonly></textarea>
+                <div class="actions">
+                    <button class="btn btn-primary" id="copy-btn">Copiar prompt</button>
+                    <button class="btn btn-secondary" id="reset-btn">Reiniciar</button>
+                </div>
+                <div class="feedback" id="copy-feedback">Prompt copiado correctamente.</div>
+                <div class="footer-note">
+                    Recomendado para herramientas de IA visual. Si adjuntas una imagen en la propia herramienta, este prompt ya incluye la instrucción para usarla como referencia o fondo.
+                </div>
+            </div>
+
+            <div class="side-card">
+                <h3>Qué mejora esta versión</h3>
+                <ul>
+                    <li>Diseño más profesional y limpio.</li>
+                    <li>Campos opcionales para titular, subtítulo y CTA.</li>
+                    <li>Posibilidad de usar una imagen como referencia visual o fondo.</li>
+                    <li>Texto del prompt más preciso y útil para resultados consistentes.</li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        const state = {
+            theme: "tips",
+            format: "infografia",
+            complexity: 1,
+            focus: "profesional",
+            platform: "Instagram",
+            topic: "",
+            audience: "",
+            headline: "",
+            subheadline: "",
+            cta: "",
+            brand: "",
+            extra: "",
+            backgroundImageName: ""
+        };
+
+        const complexityLabels = {
+            1: "Básico",
+            2: "Intermedio",
+            3: "Avanzado"
+        };
+
+        const themes = {
+            tips: "tips prácticos y aplicables",
+            conceptos: "conceptos clave explicados de forma visual",
+            tutorial: "tutorial paso a paso",
+            errores: "errores frecuentes y cómo evitarlos",
+            comparativa: "comparativa clara entre dos enfoques u opciones",
+            inspiracion: "mensaje inspirador con enfoque profesional"
+        };
+
+        const formats = {
+            infografia: "infografía editorial limpia y bien jerarquizada",
+            quote: "cita visual o frase destacada con composición minimalista",
+            carrusel: "diapositiva de carrusel visualmente potente",
+            mockup: "composición con mockup o interfaz digital integrada",
+            comparacion: "composición comparativa lado a lado",
+            poster: "cartel visual limpio de alto impacto"
+        };
+
+        const focuses = {
+            profesional: "contexto profesional y de trabajo",
+            negocio: "contexto de emprendimiento, ventas o negocio",
+            educativo: "contexto educativo y formativo",
+            marca: "contexto de marca personal y posicionamiento",
+            tecnico: "contexto técnico y especializado",
+            motivacional: "contexto de crecimiento y motivación"
+        };
+
+        function updateSummary() {
+            const chips = [];
+            chips.push(state.platform);
+            chips.push(themes[state.theme]);
+            chips.push(formats[state.format]);
+            chips.push(complexityLabels[state.complexity]);
+            chips.push(focuses[state.focus]);
+
+            if (state.topic.trim()) chips.push("Tema: " + state.topic.trim());
+            if (state.audience.trim()) chips.push("Público: " + state.audience.trim());
+            if (state.backgroundImageName) chips.push("Imagen: " + state.backgroundImageName);
+
+            const container = document.getElementById("summary-chips");
+            container.innerHTML = chips.map(chip => `<span class="chip">${chip}</span>`).join("");
+        }
+
+        function generatePrompt() {
+            const level = complexityLabels[state.complexity];
+            const topic = state.topic.trim() || "contenidos digitales y comunicación visual";
+            const audience = state.audience.trim();
+            const headline = state.headline.trim();
+            const subheadline = state.subheadline.trim();
+            const cta = state.cta.trim();
+            const brand = state.brand.trim();
+            const extra = state.extra.trim();
+            const hasImage = !!state.backgroundImageName;
+
+            let customTexts = "";
+            if (headline || subheadline || cta || brand) {
+                customTexts += "\n**Textos personalizados a respetar si es posible:**\n";
+                if (headline) customTexts += `- Texto principal: "${headline}"\n`;
+                if (subheadline) customTexts += `- Subtexto: "${subheadline}"\n`;
+                if (cta) customTexts += `- CTA o mensaje final: "${cta}"\n`;
+                if (brand) customTexts += `- Firma, marca o nombre visible: "${brand}"\n`;
+            }
+
+            let imageInstruction = "";
+            if (hasImage) {
+                imageInstruction = `\n**Referencia visual:** usar la imagen adjunta "${state.backgroundImageName}" como base compositiva, como fondo o como referencia estética principal, integrándola de forma elegante y profesional.\n`;
+            }
+
+            let audienceInstruction = "";
+            if (audience) {
+                audienceInstruction = `\n**Público objetivo:** ${audience}\n`;
+            }
+
+            let extraInstruction = "";
+            if (extra) {
+                extraInstruction = `\n**Indicaciones adicionales:** ${extra}\n`;
+            }
+
+            const prompt = `Crea una imagen profesional para ${state.platform} con formato vertical tipo publicación social (preferiblemente 1080x1350 px), con estos requisitos:
+
+**Contenido:** ${themes[state.theme]}
+**Tema:** ${topic}
+**Formato visual:** ${formats[state.format]}
+**Nivel del contenido:** ${level}
+**Enfoque:** ${focuses[state.focus]}${audienceInstruction}${imageInstruction}${customTexts}${extraInstruction}
+
+**Dirección de arte:**
+- Estilo contemporáneo, profesional y limpio
+- Diseño editorial moderno, con jerarquía visual clara
+- Paleta refinada de 2 a 4 colores como máximo
+- Tipografía sans-serif elegante, legible y bien contrastada
+- Uso generoso del espacio en blanco
+- Composición equilibrada, cuidada y con alineaciones precisas
+- Evitar sobrecarga visual, elementos decorativos innecesarios o estética amateur
+
+**Requisitos de composición:**
+- Priorizar claridad, impacto visual y legibilidad
+- Integrar iconos o recursos gráficos solo si aportan valor
+- Mantener una estética coherente con marca profesional
+- Asegurar que el texto sea fácil de leer en móvil
+- Si hay texto personalizado, respetarlo de forma natural dentro del diseño
+- Si se usa imagen de referencia, integrarla sin que el diseño pierda limpieza
+
+**Tono visual y comunicativo:**
+profesional, actual, confiable, visualmente atractivo y pensado para generar autoridad y conexión.
+
+**Resultado esperado:**
+una pieza visual lista para redes sociales, con acabado premium, bien compuesta y adecuada para una marca o profesional que quiere comunicar con claridad y estilo.`;
+
+            document.getElementById("prompt-output").value = prompt;
+            updateSummary();
+        }
+
+        function selectButton(groupSelector, target, keyName, value) {
+            document.querySelectorAll(`${groupSelector} .option-btn`).forEach(btn => btn.classList.remove("selected"));
+            target.classList.add("selected");
+            state[keyName] = value;
+            generatePrompt();
+        }
+
+        function copyToClipboard() {
+            const output = document.getElementById("prompt-output").value;
+            navigator.clipboard.writeText(output).then(() => {
+                const feedback = document.getElementById("copy-feedback");
+                feedback.classList.add("show");
+                setTimeout(() => feedback.classList.remove("show"), 2200);
+            });
+        }
+
+        function resetForm() {
+            state.theme = "tips";
+            state.format = "infografia";
+            state.complexity = 1;
+            state.focus = "profesional";
+            state.platform = "Instagram";
+            state.topic = "";
+            state.audience = "";
+            state.headline = "";
+            state.subheadline = "";
+            state.cta = "";
+            state.brand = "";
+            state.extra = "";
+            state.backgroundImageName = "";
+
+            document.getElementById("complexity").value = 1;
+            document.getElementById("level-value").textContent = "Básico";
+            document.getElementById("focus").value = "profesional";
+            document.getElementById("platform").value = "Instagram";
+            document.getElementById("topic").value = "";
+            document.getElementById("audience").value = "";
+            document.getElementById("headline").value = "";
+            document.getElementById("subheadline").value = "";
+            document.getElementById("cta").value = "";
+            document.getElementById("brand").value = "";
+            document.getElementById("extra").value = "";
+            document.getElementById("background-image").value = "";
+            document.getElementById("file-info").textContent = "No se ha seleccionado ninguna imagen.";
+
+            document.querySelectorAll(".option-btn").forEach(btn => btn.classList.remove("selected"));
+            document.querySelector('[data-theme="tips"]').classList.add("selected");
+            document.querySelector('[data-format="infografia"]').classList.add("selected");
+
+            generatePrompt();
+        }
+
+        document.getElementById("theme-grid").addEventListener("click", (e) => {
+            const btn = e.target.closest(".option-btn");
+            if (!btn) return;
+            selectButton("#theme-grid", btn, "theme", btn.dataset.theme);
+        });
+
+        document.getElementById("format-grid").addEventListener("click", (e) => {
+            const btn = e.target.closest(".option-btn");
+            if (!btn) return;
+            selectButton("#format-grid", btn, "format", btn.dataset.format);
+        });
+
+        document.getElementById("complexity").addEventListener("input", (e) => {
+            state.complexity = parseInt(e.target.value, 10);
+            document.getElementById("level-value").textContent = complexityLabels[state.complexity];
+            generatePrompt();
+        });
+
+        document.getElementById("focus").addEventListener("change", (e) => {
+            state.focus = e.target.value;
+            generatePrompt();
+        });
+
+        document.getElementById("platform").addEventListener("change", (e) => {
+            state.platform = e.target.value;
+            generatePrompt();
+        });
+
+        ["topic","audience","headline","subheadline","cta","brand","extra"].forEach(id => {
+            document.getElementById(id).addEventListener("input", (e) => {
+                state[id] = e.target.value;
+                generatePrompt();
+            });
+        });
+
+        document.getElementById("background-image").addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            state.backgroundImageName = file ? file.name : "";
+            document.getElementById("file-info").textContent = file
+                ? `Imagen seleccionada: ${file.name}`
+                : "No se ha seleccionado ninguna imagen.";
+            generatePrompt();
+        });
+
+        document.getElementById("copy-btn").addEventListener("click", copyToClipboard);
+        document.getElementById("reset-btn").addEventListener("click", resetForm);
+
+        document.querySelector('[data-theme="tips"]').classList.add("selected");
+        document.querySelector('[data-format="infografia"]').classList.add("selected");
+        generatePrompt();
+    </script>
+</body>
+</html>
